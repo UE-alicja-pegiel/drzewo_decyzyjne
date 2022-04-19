@@ -1,11 +1,15 @@
 import math
 
-tabDec = open("testowaTabDec.txt", "r")
+tabDec = open("gielda.txt", "r")
+#tabDec = open("testowaTabDec.txt", "r")
 tablica = tabDec.read().split()
-print(tablica)
 
 
 def podziel_atrybuty(tab: list) -> list:
+    """
+    :param tab: lista składająca się z wierszy z wczytanych danych (x1, x2, ..., xn)
+    :return: lista składająca się z kolumn z wczytanych danych (a1, a2, ..., d)
+    """
     lista = []
     znak = ","
     for element in tab:
@@ -16,45 +20,99 @@ def podziel_atrybuty(tab: list) -> list:
 
 
 def liczba_wartosci(tab: list) -> dict:
+    """
+    :param tab: lista składająca się z atrybutów (a1, a2, ..., d)
+    :return: słownik składający się z możliwej liczby wartości dla każdego atrybutu
+    """
     return {"a"+f"{i+1}" if i < len(tab)-1 else "d": len(set(v)) for i, v in enumerate(tab)}
 
 
 def liczba_wystapien(tab: list) -> dict:
+    """
+    :param tab: lista składająca się z atrybutów (a1, a2, ..., d)
+    :return: słownik składający się z wystąpień każdej wartości każdego atrybutu
+    """
     lista = []
     for idx, element in enumerate(tab):
-        elementy = {i: element.count(i) for i in sorted(set(element))}
+        elementy = {i: element.count(i) for i in set(element)}
         lista.append(elementy)
     return {"a"+f"{i+1}" if i < len(tab)-1 else "d": lista[i] for i, v in enumerate(tab)}
 
 
-def prawdopodobienstwa(d: int, w: dict) -> list:
+def podzial(tab: list) -> dict:
+    """
+    :param tab: lista składająca się z atrybutów (a1, a2, ..., d)
+    :return: słownik składający się z liczby wystąpień każdej wartości atrybutu decyzyjnego dla każdego atrybutu
+    """
+    slownik = {}
+
+    for idx, element in enumerate(tab[:len(tab)-1]):
+        elementy = {i: {j: 0 for j in tab[-1]} for i in set(element)}
+        slownik["a"+f"{idx+1}"] = elementy
+
+    for d in set(tab[-1]):
+        for i, element in enumerate(tab[:len(tab)-1]):
+            for idx, el in enumerate(tab[-1]):
+                if el == d:
+                    slownik["a" + f"{i + 1}"][element[idx]][d] += 1
+    return slownik
+
+
+def lista_p(x: str, w: dict) -> list:
+    """
+    :param x: nazwa atrybutu
+    :param w: słownik wystąpień wartości atrybutu
+    :return: lista prawdopodobieństw wystąpień wartości danego atrybutu
+    """
     p = []
-    for i in w:
-        p.append(w[i]/d)
+    wystapienia = w[x]
+    d = sum(wystapienia.values())
+    for idx, klucz in enumerate(wystapienia):
+        p.append(wystapienia[klucz]/d)
     return p
 
 
-def entropia(p: list) -> float:
+def entropia_decyzyjna(p: list) -> float:
+    """
+    :param p: lista prawdopodobieństw wystąpień wartości danego atrybutu
+    :return: wartość entropii
+    """
     wynik = 0
     for el in p:
-        wynik += el*math.log2(el)
+        if el != 0:
+            wynik += el*math.log2(el)
     return -1*wynik
 
 
-def info(atrybut: str, t: int) -> float:
+def info(x: str, w: dict, o: dict) -> float:
+    p = lista_p(x, w)
+    iloczyn = {element: p[idx] for idx, element in enumerate(set(w[x]))}
+    i = {}
+    wystapienia = o[x]
     wynik = 0
-    pass
+    for el in set(w[x]):
+        temp = []
+        d = sum(wystapienia[el].values())
+        for idx, klucz in enumerate(wystapienia[el]):
+            temp.append(wystapienia[el][klucz] / d)
+        i[el] = temp
+
+    for idx, el in enumerate(i.keys()):
+        wynik += iloczyn[el]*entropia_decyzyjna(i[el])
+
+    return wynik
 
 
 atrybuty = podziel_atrybuty(tablica)
 wartosci = liczba_wartosci(atrybuty)
 wystapienia = liczba_wystapien(atrybuty)
-t = len(atrybuty[-1])
-p = prawdopodobienstwa(t, wystapienia["d"])
-e = entropia(p)
+entropia = entropia_decyzyjna(lista_p("d", wystapienia))
+obiekty = podzial(atrybuty)
 
 print(f"Lista atrybutów: {atrybuty}")
 print(f"Możliwa liczba wartości dla każdego atrybutu: {wartosci}")
 print(f"Wystąpienie każdej wartości każdego atrybutu: {wystapienia}")
-print(f"Entropia dla atrybutu decyzyjnego wynosi: {e}")
-print(info("a1", t))
+print(f"Entropia według klas decyzyjnych wynosi: {entropia}")
+print(f"Funkcja informacji dla atrybutu a1: {info('a1', wystapienia, obiekty)}")
+print(f"Funkcja informacji dla atrybutu a1: {info('a2', wystapienia, obiekty)}")
+print(f"Funkcja informacji dla atrybutu a1: {info('a3', wystapienia, obiekty)}")

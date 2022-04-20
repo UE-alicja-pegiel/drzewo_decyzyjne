@@ -23,6 +23,18 @@ def liczba_wartosci(tab: list) -> dict:
     return {"a"+f"{i+1}" if i < len(tab)-1 else "d": len(set(v)) for i, v in enumerate(tab)}
 
 
+def liczba_wystapien(tab: list) -> dict:
+    """
+    :param tab: lista składająca się z atrybutów (a1, a2, ..., d), gdzie d to atrybut decyzyjny
+    :return: słownik składający się z wystąpień każdej wartości każdego atrybutu
+    """
+    lista = []
+    for idx, element in enumerate(tab):
+        elementy = {i: element.count(i) for i in set(element)}
+        lista.append(elementy)
+    return {"a"+f"{i+1}" if i < len(tab)-1 else "d": lista[i] for i, v in enumerate(tab)}
+
+
 def oblicz(plik) -> dict:
     """
     :param plik: plik tekstowy zawierający dane oddzielone przecinkiem
@@ -30,6 +42,7 @@ def oblicz(plik) -> dict:
     """
     atrybuty = wczytaj_dane(plik.read().split())
     wartosci = liczba_wartosci(atrybuty)
-    print(wartosci)
+    wystapienia = liczba_wystapien(atrybuty)
+
     slownik = {}
     return slownik

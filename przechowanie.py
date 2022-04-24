@@ -23,14 +23,14 @@ def liczba_wartosci(tab: list) -> dict:
     return {"a"+f"{i+1}" if i < len(tab)-1 else "d": len(set(v)) for i, v in enumerate(tab)}
 
 
-def liczba_wartosci_decyzyjnych(tab: dict, x: str) -> dict:
+def liczba_wartosci_decyzyjnych(tab: dict) -> dict:
     """
     :param tab: słownik
     :return: słownik składający się z możliwej liczby wartości dla każdego atrybutu
     """
     wynik = {}
-    for idx, element in enumerate(tab[x]):
-        temp = {f"{el}": tab[x][element] for i, el in enumerate(tab[x][element]) if tab[x][element][el] != 0}
+    for idx, element in enumerate(tab):
+        temp = {f"{el}": tab[element] for i, el in enumerate(tab[element]) if tab[element][el] != 0}
         wynik[element] = len(temp)
     return wynik
 
@@ -45,14 +45,6 @@ def liczba_wystapien(tab: list) -> dict:
         elementy = {i: element.count(i) for i in set(element)}
         lista.append(elementy)
     return {"a"+f"{i+1}" if i < len(tab)-1 else "d": lista[i] for i, v in enumerate(tab)}
-
-
-def bez_zer(slownik):
-    nowy = {}
-    for element in slownik:
-        nowy[element] = {i: {j: slownik[element][i][j] for j in slownik[element][i] if slownik[element][i][j] != 0}
-                         for i in slownik[element]}
-    return nowy
 
 
 def liczba_wystapien_decyzyjnych(tab: list) -> dict:
@@ -71,11 +63,7 @@ def liczba_wystapien_decyzyjnych(tab: list) -> dict:
             for idx, el in enumerate(tab[-1]):
                 if el == d:
                     slownik["a" + f"{i + 1}"][element[idx]][d] += 1
-    return bez_zer(slownik)
-
-
-def atrybuty_slownik(tab: list) -> dict:
-    return {"a"+f"{i+1}" if i < len(tab)-1 else "d": tab[i] for i, v in enumerate(tab)}
+    return slownik
 
 
 def wartosci_prawdopodobienstw(x: str, w: dict) -> list:
@@ -179,11 +167,8 @@ def oblicz_wybor(atrybuty, wystapienia):
     return wybor
 
 
-def rek(poziom, wystapienia_decyzyjne, nazwy, idx):
-    lw = liczba_wartosci_decyzyjnych(wystapienia_decyzyjne, nazwy[idx])
-    return {poziom: {i: list(wystapienia_decyzyjne[nazwy[idx]].get(i).keys())[0]
-    if len(list(wystapienia_decyzyjne[nazwy[idx]].get(i).keys())) == 1
-    else list(wystapienia_decyzyjne[nazwy[idx]].get(i).keys()) for i in lw}}
+def rek(poziom):
+    return {poziom: {}}
 
 
 def drzewo(plik) -> dict:
@@ -199,5 +184,5 @@ def drzewo(plik) -> dict:
     nazwy = list(liczba.keys())
     nazwy = nazwy[:len(nazwy)-1]
     idx = nazwy.index(wybor)
-    slownik = rek(1, wystapienia_decyzyjne, nazwy, idx)
+    slownik = rek(1, )
     return slownik

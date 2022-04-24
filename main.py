@@ -5,9 +5,9 @@ test = {1: {'old': 'down', 'mid': {2: {'yes': 'down', 'no': 'up'}}, 'new': 'up'}
 
 tab = open("gielda.txt", "r")
 
-test1 = obl.oblicz(tab)
+test1 = obl.drzewo(tab)
 print(test)
 print(test1)
 
-w = wiz.buduj(test)
+w = wiz.buduj(test1)
 wiz.wyswietl_drzewo(w, 0)

@@ -128,6 +128,7 @@ wystapienia = liczba_wystapien(atrybuty)
 entropia = entropia_decyzyjna(lista_p("d", wystapienia))
 obiekty = podzial(atrybuty)
 
+
 print(f"Lista atrybutów: {atrybuty}")
 print(f"Możliwa liczba wartości dla każdego atrybutu: {wartosci}")
 print(f"Wystąpienie każdej wartości każdego atrybutu: {wystapienia}")

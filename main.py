@@ -9,9 +9,13 @@ print("\nNiestety nie zdążyłam zrobić do końca poprawnego drzewa. \nWszystk
       "tam testowałam wartości, które wychodzą dobrze. \nNiestety nie będę miała dostępu do komputera"
       "w czasie 27.04-09.05.2022, dlatego muszę wysłać projekt w obecnym stanie. \n"
       "Spodobała mi się praca nad drzewem, więc na pewno spróbuję go później jeszcze naprawić :)\n")
+print(f"Powinno być: {test}")
+
+w = wiz.buduj(test)
+wiz.wyswietl_drzewo(w, 0)
 
 test1 = obl.drzewo(tab)
-print(test1)
+print(f"\nJest: {test1}")
 
-w = wiz.buduj(test1)
-wiz.wyswietl_drzewo(w, 0)
+w1 = wiz.buduj(test1)
+wiz.wyswietl_drzewo(w1, 0)

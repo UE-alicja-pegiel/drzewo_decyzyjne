@@ -133,14 +133,7 @@ print(f"Lista atrybutów: {atrybuty}")
 print(f"Możliwa liczba wartości dla każdego atrybutu: {wartosci}")
 print(f"Wystąpienie każdej wartości każdego atrybutu: {wystapienia}")
 print(f"Entropia według klas decyzyjnych wynosi: {entropia}")
-print(f"Funkcja informacji dla atrybutu a1: {info('a1', wystapienia, obiekty)}")
-print(f"Funkcja informacji dla atrybutu a2: {info('a2', wystapienia, obiekty)}")
-print(f"Funkcja informacji dla atrybutu a3: {info('a3', wystapienia, obiekty)}")
-
-print(f"Przyrost informacji dla atrybutu a1: {gain('a1', atrybuty)}")
-print(f"Przyrost informacji dla atrybutu a2: {gain('a2', atrybuty)}")
-print(f"Przyrost informacji dla atrybutu a3: {gain('a3', atrybuty)}")
-
-print(f"Zrównoważony przyrost informacji dla atrybutu a1: {gain_ratio('a1', atrybuty)}")
-print(f"Zrównoważony przyrost informacji dla atrybutu a2: {gain_ratio('a2', atrybuty)}")
-print(f"Zrównoważony przyrost informacji dla atrybutu a3: {gain_ratio('a3', atrybuty)}")
+for i in range(1, len(atrybuty)):
+    print(f"Funkcja informacji dla atrybutu a{i}: {info(f'a{i}', wystapienia, obiekty)}")
+    print(f"Przyrost informacji dla atrybutu a{i}: {gain(f'a{i}', atrybuty)}")
+    print(f"Zrównoważony przyrost informacji dla atrybutu a{i}: {gain_ratio(f'a{i}', atrybuty)}")
